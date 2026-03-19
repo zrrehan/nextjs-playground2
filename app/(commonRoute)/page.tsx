@@ -1,7 +1,12 @@
-export default function Page() {
-    return (
+import Banner from "./_component/page/Hero/Banner";
+
+
+function Page() {
+    return(
         <div>
-            common route page
+            <Banner></Banner>
         </div>
     )
 }
+
+export default Page;
