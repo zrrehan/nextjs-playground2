@@ -6,7 +6,7 @@ export default function DashboardLayout({
   children: React.ReactNode
 }) {
   return (
-    <div>
+    <div suppressHydrationWarning >
         <Navbar className="mx-auto w-fit"></Navbar>
         {children}
         <h2 className="bg-blue-300">Footer</h2>
