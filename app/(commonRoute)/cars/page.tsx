@@ -1,20 +1,41 @@
 import { Button } from "@/components/ui/button";
 import { envVar } from "@/utils/envVar";
+import { fetchCarData } from "@/utils/fetchCarData";
 import Link from "next/link";
+import type { Metadata, ResolvingMetadata } from 'next'
+import TotalProduct from "./TotalProduct";
+
+type Props = {
+  params: Promise<{ id: string }>
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>
+}
+
+
+export async function generateMetadata(
+  { params, searchParams }: Props,
+  parent: ResolvingMetadata
+): Promise<Metadata> {
+    // read route params
+    let carsData = await fetchCarData("METADATA FETCH");
+    return {
+        title: `Total cars: ${carsData.data.length}`
+    }
+}
+
+
 
 async function Cars() {
     interface SingleCar {
         id: string;
         [key: string]: any;
     }
-    let data = await fetch(`${envVar.backendUrl}/cars`);
-    let carsData = await data.json();
+    let carsData = await fetchCarData("ALL CAR FETCH");
     return(
-        <div>
+        <div className="px-2">
             {
-                carsData.data.map((singleCar: SingleCar) => {
+                carsData.data.map((singleCar: SingleCar, index: number) => {
                     return <p key = {singleCar.id}>
-                        {JSON.stringify(singleCar)} 
+                        <b>{index}</b> {JSON.stringify(singleCar)} 
                         <br /> 
                             <Link href={`/cars/${singleCar.id}`}>
                                 <Button>View Details</Button>
@@ -23,6 +44,7 @@ async function Cars() {
                     </p>
                 })
             }
+            <TotalProduct/>
         </div>
     )
 }
